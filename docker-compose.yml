@@ -1,0 +1,29 @@
+version: '3'
+services:
+  ros:
+    image: robopaas/rap-lab-kinetic:rap20210323 
+    hostname: rosdocked
+    environment:
+      - ROS_HOSTNAME=rosdocked
+      - DISPLAY=novnc:0.0
+    depends_on:
+      - novnc
+    command: roscore
+    volumes:
+      - $PWD:/home/ros/catkin_ws/src/rap_pose_lab/
+    devices:
+      - /dev/video0:/dev/video0
+      - /dev/video1:/dev/video1
+      - /dev/video2:/dev/video2
+      - /dev/video3:/dev/video3 
+
+  novnc:  
+    image: robopaas/novnc:labs
+    hostname: novnc
+    environment:
+      # Adjust to your screen size
+      - DISPLAY_WIDTH= 1920
+      - DISPLAY_HEIGHT= 1080
+    shm_size: 2gb
+    ports:
+      - "80:8080"
